@@ -1,0 +1,32 @@
+﻿@model ShippingTypeDto
+
+@{
+    ViewData["Title"] = "Add New Shipping Type";
+}
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add New Shipping Type</h4>
+            <p class="card-description"> Enter details of the new shipping type </p>
+            <form class="forms-sample" method="post" asp-area="Admin" asp-controller="ShippingTypes" asp-action="Create">
+                <div class="form-group">
+                    <label asp-for="ShippingTypeName"></label>
+                    <input asp-for="ShippingTypeName" class="form-control" placeholder="Enter Shipping Type Name">
+                    <span asp-validation-for="ShippingTypeName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ShippingFactor"></label>
+                    <input asp-for="ShippingFactor" class="form-control" placeholder="Enter Factor Relatively To Land Shipping Cost">
+                    <span asp-validation-for="ShippingFactor" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-gradient-primary me-2" onclick="return confirm('Are you sure you want to save the values?');">Create</button>
+                <button type="reset" class="btn btn-dark">Clear</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"></partial>
+}

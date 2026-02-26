@@ -1,0 +1,46 @@
+﻿@model ShippingTypeDto
+
+@{
+    ViewData["Title"] = "Edit Shipping Type";
+}
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Edit Shipping Type</h4>
+            <p class="card-description"> Enter desired updates on the shipping type </p>
+            <form class="forms-sample" method="post" asp-area="Admin" asp-controller="ShippingTypes" asp-action="Update" asp-route-id="@Model.Id">
+                <div class="form-group">
+                    <label asp-for="ShippingTypeName"></label>
+                    <input asp-for="ShippingTypeName" class="form-control" placeholder="Enter Shipping Type Name">
+                    <span asp-validation-for="ShippingTypeName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ShippingFactor"></label>
+                    <input asp-for="ShippingFactor" class="form-control" placeholder="Enter Factor Relatively To Land Shipping Cost">
+                    <span asp-validation-for="ShippingFactor" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-gradient-primary me-2" onclick="return confirm('Are you sure you want to save the values?');">Update</button>
+                <button type="reset" class="btn btn-dark">Clear</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"></partial>
+
+    @if (TempData["Updated Successfully"] is not null)
+    {
+        <script>
+            if (@Convert.ToBoolean(TempData["Updated Successfully"]).ToString().ToLower())
+            {
+                toastr.success("Shipping Type has been updated successfully");
+            }
+            else
+            {
+                toastr.error("Unexpected error happened while trying to save the updated shipping type.");
+            }
+        </script>
+    }
+}

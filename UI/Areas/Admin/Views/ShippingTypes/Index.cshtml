@@ -1,0 +1,100 @@
+﻿@model List<ShippingTypeDto>
+
+@{
+    ViewData["Title"] = "Shipping Types List";
+}
+
+
+
+@section Styles{
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="~/admin/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <!-- End plugin css for this page -->
+}
+
+<div class="content-wrapper">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Shipping Types List</h4>
+            <a asp-area="Admin" asp-controller="ShippingTypes" asp-action="Create" class="btn btn-gradient-primary btn-rounded btn-fw" style="margin-bottom: 20px;">Add New Shipping Type</a>
+            <div class="row">
+                <div class="col-12">
+                    <table id="order-listing" class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Calculation Factor</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.ShippingTypeName</td>
+                                    <td>@item.ShippingFactor</td>
+                                    <td>
+                                        <a asp-area="Admin" asp-controller="ShippingTypes" asp-action="Update" asp-route-id="@item.Id" class="btn btn-outline-info btn-fw" style="margin-right: 25px;">Edit</a>
+                                        <a asp-area="Admin" asp-controller="ShippingTypes" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-fw" onclick="return confirm('Are you sure you want to delete the selected record?');">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content-wrapper ends -->
+
+
+
+@section Scripts{
+    <!-- Plugin js for this page -->
+    <script src="~/admin/assets/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="~/admin/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <!-- End plugin js for this page -->
+
+    <!-- Custom js for this page -->
+    <script src="~/admin/assets/js/data-table.js"></script>
+    <!-- End custom js for this page -->
+
+    @if (TempData["Deleted Successfully"] is not null)
+    {
+        <script>
+            if (@Convert.ToBoolean(TempData["Deleted Successfully"]).ToString().ToLower())
+            {
+                toastr.success("Shipping Type has been deleted successfully");
+            }
+            else
+            {
+                toastr.error("Unexpected error happened while trying to delete the shipping type.");
+            }
+        </script>
+    }
+
+    @if (TempData["Created Successfully"] is not null)
+    {
+        <script>
+            if (@Convert.ToBoolean(TempData["Created Successfully"]).ToString().ToLower())
+            {
+                toastr.success("Shipping Type has been created and saved successfully");
+            }
+            else
+            {
+                toastr.error("Unexpected error happened while trying to insert/save the shipping type.");
+            }
+        </script>
+    }
+
+    @if (TempData["Error"] is not null)
+    {
+        <script>
+            if (@Convert.ToBoolean(TempData["Error"]).ToString().ToLower())
+            {
+                toastr.error("Error While Processing the Request.");
+            }
+        </script>
+    }
+}
