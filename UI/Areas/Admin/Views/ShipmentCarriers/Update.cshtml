@@ -1,0 +1,41 @@
+﻿@model ShipmentCarrierDto
+
+@{
+    ViewData["Title"] = "Edit Shipment Carrier";
+}
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Edit Shipment Carrier</h4>
+            <p class="card-description"> Enter desired updates on the Shipment Carrier </p>
+            <form class="forms-sample" method="post" asp-area="Admin" asp-controller="ShipmentCarriers" asp-action="Update" asp-route-id="@Model.Id">
+                <div class="form-group">
+                    <label asp-for="CarrierName"></label>
+                    <input asp-for="CarrierName" class="form-control" placeholder="Enter Shipment Carrier Name">
+                    <span asp-validation-for="CarrierName" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-gradient-primary me-2" onclick="return confirm('Are you sure you want to save the values?');">Update</button>
+                <button type="reset" class="btn btn-dark">Clear</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"></partial>
+
+    @if (TempData["Updated Successfully"] is not null)
+    {
+        <script>
+            if (@Convert.ToBoolean(TempData["Updated Successfully"]).ToString().ToLower())
+            {
+                toastr.success("Shipment Carrier has been updated successfully");
+            }
+            else
+            {
+                toastr.error("Unexpected error happened while trying to save the updated Shipment Carrier.");
+            }
+        </script>
+    }
+}

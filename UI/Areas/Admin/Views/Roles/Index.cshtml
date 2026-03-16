@@ -1,0 +1,52 @@
+﻿@using DataAccess.SecurityModels
+@model List<ApplicationRole>
+
+@{
+    ViewData["Title"] = "Roles List";
+}
+
+
+
+@section Styles {
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="~/admin/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <!-- End plugin css for this page -->
+}
+
+<div class="content-wrapper">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Roles List</h4>
+            <a asp-area="Admin" asp-controller="Roles" asp-action="AddNew" class="btn btn-gradient-primary btn-rounded btn-fw" style="margin-bottom: 20px;">Add New Role</a>
+            <div class="row">
+                <div class="col-12">
+                    <table id="order-listing" class="table">
+                        <thead>
+                            <tr>
+                                <th>Role Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content-wrapper ends -->
+@section Scripts {
+    <!-- Plugin js for this page -->
+    <script src="~/admin/assets/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="~/admin/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- Custom js for this page -->
+    <script src="~/admin/assets/js/data-table.js"></script>
+    <!-- End custom js for this page -->
+}

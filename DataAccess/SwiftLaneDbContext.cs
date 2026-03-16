@@ -11,6 +11,17 @@ namespace DataAccess
         {
         }
 
+
+        public SwiftLaneDbContext() { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=.;Database=SwiftLaneDB;Trusted_Connection=True;TrustServerCertificate=True;");
+            }
+        }
+
+
         public DbSet<City> Cities { get; set; }
 
         public DbSet<Country> Countries { get; set; }

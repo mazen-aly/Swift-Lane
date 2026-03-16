@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Add New Role";
+}
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add New Role</h4>
+            <form class="forms-sample" method="post" asp-area="Admin" asp-controller="Roles" asp-action="AddNew">
+                <div asp-validation-summary="All"class="text-danger"></div>
+                <div class="form-group">
+                    <label name="roleName" for="roleName">Role Name</label>
+                    <input name="roleName" id="roleName" class="form-control" placeholder="Enter New Role Name">
+                </div>
+
+                <button type="submit" class="btn btn-gradient-primary me-2" onclick="return confirm('Are you sure you want to save the new role?');">Create</button>
+                <button type="reset" class="btn btn-dark">Clear</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"></partial>
+}

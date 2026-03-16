@@ -10,11 +10,13 @@ namespace BusinessLogic.Services
     {
         private readonly IRepository<TDomainModel> _repo;
         private readonly IMapper _mapper;
+        private readonly ISecurityService _securityService;
 
-        public BaseService(IRepository<TDomainModel> repo, IMapper mapper)
+        public BaseService(IRepository<TDomainModel> repo, IMapper mapper, ISecurityService securityService)
         {
             _repo = repo;
             _mapper = mapper;
+            _securityService = securityService;
         }
 
 
@@ -34,17 +36,17 @@ namespace BusinessLogic.Services
         }
 
 
-        public async Task<bool> AddNewAsync(TDTO domainModelDTO, Guid userId)
+        public async Task<bool> AddNewAsync(TDTO domainModelDTO)
         {
             var domainModel = _mapper.Map<TDomainModel>(domainModelDTO);
             domainModel.CreatedDate = DateTime.Now;
-            domainModel.CreatedBy = userId;
+            domainModel.CreatedBy = _securityService.GetLoggedInUserId();
 
             return await _repo.AddNewAsync(domainModel);
         }
 
 
-        public async Task<bool> UpdateAsync(TDTO domainModelDTO, Guid userId)
+        public async Task<bool> UpdateAsync(TDTO domainModelDTO)
         {
             if (!await _repo.CheckExistenceAsync(domainModelDTO.Id))
             {
@@ -56,13 +58,13 @@ namespace BusinessLogic.Services
             _mapper.Map(domainModelDTO, domainModel);
 
             domainModel.UpdatedDate = DateTime.Now;
-            domainModel.UpdatedBy = userId;
+            domainModel.UpdatedBy = _securityService.GetLoggedInUserId();
 
             return await _repo.UpdateAsync(domainModel);
         }
 
 
-        public async Task<bool> DeleteAsync(Guid id, Guid userId)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var domainModel = await _repo.GetByIdAsync(id);
 
@@ -74,7 +76,7 @@ namespace BusinessLogic.Services
             // Soft deletes the entity
             domainModel.CurrentState = Convert.ToInt32(DatabaseRecordState.Deleted);
             domainModel.UpdatedDate = DateTime.Now;
-            domainModel.UpdatedBy = userId;
+            domainModel.UpdatedBy = _securityService.GetLoggedInUserId();
 
             return await _repo.UpdateAsync(domainModel);
         }

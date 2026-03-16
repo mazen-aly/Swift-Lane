@@ -6,9 +6,12 @@ using BusinessLogic.Services;
 using DataAccess;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
+using DataAccess.SecurityModels;
 using Entities;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using UI.Services;
 
 namespace UI
 {
@@ -30,9 +33,44 @@ namespace UI
 
                 // Add services to the container.
                 builder.Services.AddControllersWithViews();
-                builder.Services.AddDbContext<SwiftLaneDbContext>(options => options.UseSqlServer(connectionString));
-                builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-                builder.Services.AddScoped<IShippingTypeService, ShippingTypeService>();
+
+                builder.Services.ConfigureApplicationCookie(cfg =>
+                {
+                    cfg.Events.OnRedirectToLogin = context =>
+                    {
+                        var returnUrl = context.Request.Path + context.Request.QueryString;
+
+                        if (context.Request.Path.StartsWithSegments("/Admin"))
+                        {
+                            context.Response.Redirect(QueryHelpers.AddQueryString("/Admin/Account/Login", "returnUrl", returnUrl));
+                        }
+
+                        else
+                        {
+                            context.Response.Redirect(QueryHelpers.AddQueryString("/Account/Login", "returnUrl", returnUrl));
+                        }
+
+                        return Task.CompletedTask;
+                    };
+
+                    cfg.Events.OnRedirectToAccessDenied = context =>
+                    {
+                        if (context.Request.Path.StartsWithSegments("/Admin"))
+                        {
+                            context.Response.Redirect("/Admin/Users/AccessDenied");
+                        }
+
+                        else
+                        {
+                            context.Response.Redirect("/Users/AccessDenied");
+                        }
+
+                        return Task.CompletedTask;
+                    };
+                });
+
+                builder.Services.AddApplicationServices(connectionString);
+
                 builder.Services.AddAutoMapper(cfg =>
                 {
                     cfg.AddProfile<MappingProfile>();
@@ -56,17 +94,15 @@ namespace UI
 
                 app.MapStaticAssets();
 
-
                 app.MapControllerRoute(
                     name: "admin",
-                    pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}")
+                    pattern: "{area}/{controller=Home}/{action=Index}/{id?}")
                     .WithStaticAssets();
 
                 app.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}")
                     .WithStaticAssets();
-
 
                 app.Run();
             }

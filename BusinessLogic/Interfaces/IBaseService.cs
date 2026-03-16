@@ -32,7 +32,7 @@
         /// <exception cref="ArgumentNullException">
         /// Thrown if <paramref name="domainModel"/> is null.
         /// </exception>
-        Task<bool> AddNewAsync(TDTO domainModel, Guid userId);
+        Task<bool> AddNewAsync(TDTO domainModel);
 
 
 
@@ -41,7 +41,7 @@
         /// </summary>
         /// <param name="domainModel">Entity that is required to be updated</param>
         /// <returns>A value indicating whether the update operation succeeded.</returns>
-        Task<bool> UpdateAsync(TDTO domainModel, Guid userId);
+        Task<bool> UpdateAsync(TDTO domainModel);
 
 
 
@@ -50,8 +50,7 @@
         /// either soft deletes it (change state to 1) or restores it (change state to 0).
         /// </summary>
         /// <param name="id">The unique identifier of the record to chnage its state.</param>
-        /// <param name="userId">The unique identifier of the user that changes the state.</param>
         /// <returns>A value indicating whether the changing the state succeeded.</returns>
-        Task<bool> DeleteAsync(Guid id, Guid userId);
+        Task<bool> DeleteAsync(Guid id);
     }
 }

@@ -2,26 +2,25 @@
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace UI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin,Viewer")]
-    public class ShippingTypesController : Controller
+    [Authorize(Roles ="Admin,Viewer")]
+    public class ShipmentCarriersController : Controller
     {
-        private readonly IShippingTypeService _shippingTypeService;
+        private readonly IShipmentCarrierService _shipmentCarrierService;
 
-        public ShippingTypesController(IShippingTypeService shippingTypeService)
+        public ShipmentCarriersController(IShipmentCarrierService shipmentCarrierService)
         {
-            _shippingTypeService = shippingTypeService;
+            _shipmentCarrierService = shipmentCarrierService;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            var allShippingTypes = await _shippingTypeService.GetAllAsync();
-            return View(allShippingTypes);
+            var allShipmentCarriers = await _shipmentCarrierService.GetAllAsync();
+            return View(allShipmentCarriers);
         }
 
 
@@ -36,7 +35,7 @@ namespace UI.Areas.Admin.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ShippingTypeDto dtoFromRequest)
+        public async Task<IActionResult> Create(ShipmentCarrierDto dtoFromRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -45,7 +44,7 @@ namespace UI.Areas.Admin.Controllers
 
             try
             {
-                TempData["Created Successfully"] = await _shippingTypeService.AddNewAsync(dtoFromRequest);
+                TempData["Created Successfully"] = await _shipmentCarrierService.AddNewAsync(dtoFromRequest);
             }
             catch
             {
@@ -56,27 +55,28 @@ namespace UI.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
-            var shippingTypeDto = await _shippingTypeService.GetByIdAsync(id);
+            var shipmentCarrierDto = await _shipmentCarrierService.GetByIdAsync(id);
 
-            if (shippingTypeDto is null)
+            if (shipmentCarrierDto is null)
             {
                 TempData["Error"] = true;
 
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(shippingTypeDto);
+            return View(shipmentCarrierDto);
         }
 
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(ShippingTypeDto dtoFromRequest)
+        public async Task<IActionResult> Update(ShipmentCarrierDto dtoFromRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -85,22 +85,23 @@ namespace UI.Areas.Admin.Controllers
 
             try
             {
-                TempData["Updated Successfully"] = await _shippingTypeService.UpdateAsync(dtoFromRequest);
+                TempData["Updated Successfully"] = await _shipmentCarrierService.UpdateAsync(dtoFromRequest);
             }
             catch
             {
                 TempData["Updated Successfully"] = false;
             }
 
-            return RedirectToAction(nameof(Update), new {id = dtoFromRequest.Id});
+            return RedirectToAction(nameof(Update), new { id = dtoFromRequest.Id });
         }
+
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _shippingTypeService.DeleteAsync(id);
+                await _shipmentCarrierService.DeleteAsync(id);
                 TempData["Deleted Successfully"] = true;
             }
             catch

@@ -62,7 +62,6 @@ namespace DataAccess.Repositories
         {
             try
             {
-                _table.Update(updatedDomainModel);
                 await _context.SaveChangesAsync();
                 return true;
             }
